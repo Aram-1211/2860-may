@@ -33,6 +33,10 @@ def recv_line(sock: socket.socket, max_len: int = MAX_FILENAME_LEN) -> bytes:
         # TODO: write your code here.
         byte = sock.recv(1)
 
+        # connection error if necesary
+        if byte == b'':
+            raise ConnectionError()
+
         # break at \n (determining a line)
         if byte == b'\n':
             break
@@ -68,9 +72,8 @@ def handle_client(conn: socket.socket, outdir: str) -> None:
         if filename == '':
             # Send LINE_ERR if invalid filename.
             # TODO: write your code here.
-            if filename == '':
                 conn.sendall(LINE_ERR)
-            return
+                return
 
         # Prepare output path.
         os.makedirs(outdir, exist_ok=True)
@@ -183,7 +186,7 @@ def run_client(server_ip: str, port: int, file_path: str, ipv6: bool) -> int:
     
     clientsock.sendall(struct.pack('!Q', file_size))
 
-    with open(file_path, 'rb') as file:
+    with open(file_path, 'rb') as f:
         while True:
             data = f.read(BUFSIZE)
             if data == b'':
@@ -192,11 +195,15 @@ def run_client(server_ip: str, port: int, file_path: str, ipv6: bool) -> int:
 
     # FInishing the process
     confirm = recv_line(clientsock)
+
+    # close clientsock
+    clientsock.close()
+
     if confirm == b'OK':
         return 0
     else:
         return 255
-
+    
 ################
 # Main program #
 ################

@@ -1,5 +1,6 @@
 dig @198.41.0.4 www.pcb.com.pk +norecurse
 dig @185.159.198.160 www.pcb.com.pk +norecurse
 dig @198.41.0.4 lisa.ns.cloudflare.com +norecurse
+dig @192.5.6.30 lisa.ns.cloudflare.com +norecurse
 dig @162.159.5.6 lisa.ns.cloudflare.com +norecurse
 dig @108.162.192.131 www.pcb.com.pk +norecurse
